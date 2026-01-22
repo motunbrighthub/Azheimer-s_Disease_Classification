@@ -45,7 +45,7 @@ CLASS_INFO = {
 # --- YarnGPT API Config ---
 import streamlit as st
 
-YARN_API_KEY = st.secrets["YARN_API_KEY"]
+YARN_API_KEY = os.environ.get("YARN_API_KEY")
 
 # --- Model download URL (Kaggle dataset) ---
 KAGGLE_MODEL_URL = "/kaggle/input/alzheimer-model/keras/default/1"  
@@ -230,3 +230,4 @@ else:
 
 if __name__ == "__main__":
     main()
+

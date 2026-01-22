@@ -6,3 +6,4 @@ Pillow
 tensorflow
 plotly
 requests
+gdown

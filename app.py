@@ -211,9 +211,10 @@ if preprocessed_img is not None:
     predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
 
     if predicted_class is not None:
-        # Display prediction, charts, YarnGPT explanation, downloads, etc.
-    else:
-        st.error("⚠️ Failed to preprocess the image. Please upload a valid MRI scan.")
+        pass
+      
+ else:
+    st.error("⚠️ Failed to preprocess the image. Please upload a valid MRI scan.")
 
     # --- YarnGPT explanation ---
     with st.expander(" Human-Friendly Explanation (YarnGPT)"):
@@ -237,6 +238,7 @@ else:
 
 if __name__ == "__main__":
     main()
+
 
 
 

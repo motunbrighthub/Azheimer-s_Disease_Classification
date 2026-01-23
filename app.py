@@ -9,14 +9,17 @@ MODEL_PATH = "alzheimers_model2.keras"
 
 MODEL_URL = "https://drive.google.com/file/d/12wVgZ_bC_W3LMSyhUVDknaLurASNC5m4/view?usp=sharing"
 
-# Download if not exists
-if not os.path.exists(MODEL_PATH):
-    st.info("Downloading Alzheimer model weights...")
-    gdown.download(MODEL_URL, "alzheimers_model.zip", quiet=False)
-    
-    # Unzip
-    with zipfile.ZipFile("alzheimers_model.zip", "r") as zip_ref:
-        zip_ref.extractall(".")
+# Download model if it doesn't exist
+if not os.path.exists(MODEL_FILE):
+    st.info("Downloading model...")
+    gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
+
+# Load model
+try:
+    model = load_model(MODEL_FILE)
+    st.success("✅ Model loaded successfully!")
+except Exception as e:
+    st.error(f"Failed to load model: {e}")
 """
 ALZHEIMER'S CLASSIFICATION - STREAMLIT WEB APP
 ==============================================
@@ -232,6 +235,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

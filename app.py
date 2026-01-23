@@ -14,7 +14,8 @@ if not os.path.exists(MODEL_FILE):
     print("Downloading model from Google Drive...")
     gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
 
-model = load_model(MODEL_FILE)
+model = load_model("alzheimers_model2.keras")
+
 """
 ALZHEIMER'S CLASSIFICATION - STREAMLIT WEB APP
 ==============================================
@@ -230,6 +231,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

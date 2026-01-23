@@ -10,13 +10,13 @@ MODEL_PATH = "alzheimers_model2.keras"
 MODEL_URL = "https://drive.google.com/file/d/12wVgZ_bC_W3LMSyhUVDknaLurASNC5m4/view?usp=sharing"
 
 # Download model if it doesn't exist
-if not os.path.exists(MODEL_FILE):
+if not os.path.exists(MODEL_PATH):
     st.info("Downloading model...")
-    gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
+    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
 
 # Load model
 try:
-    model = load_model(MODEL_FILE)
+    model = load_model(MODEL_PATH)
     st.success("✅ Model loaded successfully!")
 except Exception as e:
     st.error(f"Failed to load model: {e}")
@@ -235,6 +235,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

@@ -43,7 +43,6 @@ CLASS_INFO = {
 }
 
 # --- YarnGPT API Config ---
-import streamlit as st
 
 YARN_API_KEY = os.environ.get("YARN_API_KEY")
 
@@ -205,8 +204,16 @@ This app uses deep learning to classify brain MRI scans into:
         # Predict
 predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
 
-if predicted_class is not None:
-    # Prediction display code here (boxes, charts)
+preprocessed_img, display_img = preprocess_image_for_model(image)  # preprocess image
+
+if preprocessed_img is not None:
+    # Safe to make prediction
+    predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
+
+    if predicted_class is not None:
+        # Display prediction, charts, YarnGPT explanation, downloads, etc.
+else:
+    st.error("⚠️ Failed to preprocess the image. Please upload a valid MRI scan.")
 
     # --- YarnGPT explanation ---
     with st.expander(" Human-Friendly Explanation (YarnGPT)"):
@@ -223,11 +230,12 @@ if predicted_class is not None:
         for c, p in all_probs.items(): results_text += f"{c}: {p:.2f}%\n"
         results_text += "\n For educational/research purposes only."
         
-        st.download_button("💾 Download Results (TXT)", data=results_text, file_name="alzheimers_results.txt", mime="text/plain")
+        st.download_button(" Download Results (TXT)", data=results_text, file_name="alzheimers_results.txt", mime="text/plain")
         
 else:
     st.info(" Upload a brain MRI scan to begin analysis")
 
 if __name__ == "__main__":
     main()
+
 

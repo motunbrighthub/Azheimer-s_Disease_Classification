@@ -7,7 +7,7 @@ import streamlit as st
 MODEL_PATH = "alzheimers_model2.keras"
 
 
-MODEL_URL = "/kaggle/input/alzheimer-model/keras/default/1/alzheimers_model2.keras"
+MODEL_URL = "https://drive.google.com/file/d/12wVgZ_bC_W3LMSyhUVDknaLurASNC5m4/view?usp=sharing"
 
 # Download if not exists
 if not os.path.exists(MODEL_PATH):
@@ -232,5 +232,6 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 

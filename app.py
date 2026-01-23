@@ -205,14 +205,13 @@ This app uses deep learning to classify brain MRI scans into:
 predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
 
 preprocessed_img, display_img = preprocess_image_for_model(image)  # preprocess image
-
 if preprocessed_img is not None:
     # Safe to make prediction
     predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
 
     if predicted_class is not None:
-        pass    
- else:
+        pass  # Replace with your display code
+else:
     st.error("⚠️ Failed to preprocess the image. Please upload a valid MRI scan.")
 
     # --- YarnGPT explanation ---
@@ -237,6 +236,7 @@ else:
 
 if __name__ == "__main__":
     main()
+
 
 
 

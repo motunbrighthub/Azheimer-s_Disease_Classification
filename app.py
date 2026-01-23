@@ -1,6 +1,7 @@
 import os
 import gdown
 import zipfile
+import streamlit as st
 
 # Local file path for the model
 MODEL_PATH = "alzheimers_model2.keras"
@@ -231,4 +232,5 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 

@@ -1,3 +1,21 @@
+import os
+import gdown
+import zipfile
+
+# Local file path for the model
+MODEL_PATH = "alzheimers_model2.keras"
+
+
+MODEL_URL = "/kaggle/input/alzheimer-model/keras/default/1/alzheimers_model2.keras"
+
+# Download if not exists
+if not os.path.exists(MODEL_PATH):
+    st.info("Downloading Alzheimer model weights...")
+    gdown.download(MODEL_URL, "alzheimers_model.zip", quiet=False)
+    
+    # Unzip
+    with zipfile.ZipFile("alzheimers_model.zip", "r") as zip_ref:
+        zip_ref.extractall(".")
 """
 ALZHEIMER'S CLASSIFICATION - STREAMLIT WEB APP
 ==============================================
@@ -213,3 +231,4 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+

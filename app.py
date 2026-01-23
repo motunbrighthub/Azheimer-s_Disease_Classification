@@ -2,24 +2,19 @@ import os
 import gdown
 import zipfile
 import streamlit as st
+from tensorflow.keras.models import load_model
+
 
 # Local file path for the model
-MODEL_PATH = "alzheimers_model2.keras"
-
-
+MODEL_FILE = "alzheimers_model2.keras"
 MODEL_URL = "https://drive.google.com/file/d/12wVgZ_bC_W3LMSyhUVDknaLurASNC5m4/view?usp=sharing"
 
-# Download model if it doesn't exist
-if not os.path.exists(MODEL_PATH):
-    st.info("Downloading model...")
-    gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
 
-# Load model
-try:
-    model = load_model(MODEL_PATH)
-    st.success("✅ Model loaded successfully!")
-except Exception as e:
-    st.error(f"Failed to load model: {e}")
+if not os.path.exists(MODEL_FILE):
+    print("Downloading model from Google Drive...")
+    gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
+
+model = load_model(MODEL_FILE)
 """
 ALZHEIMER'S CLASSIFICATION - STREAMLIT WEB APP
 ==============================================
@@ -235,6 +230,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

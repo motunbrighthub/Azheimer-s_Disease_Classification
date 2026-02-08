@@ -12,6 +12,8 @@ MODEL_URL = "https://drive.google.com/uc?id=12wVgZ_bC_W3LMSyhUVDknaLurASNC5m4"
 if not os.path.exists(MODEL_FILE):
     st.write("Downloading model from Google Drive...")
     gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
+    st.write("Current working directory:", os.getcwd())
+    st.write("Files in directory:", os.listdir())
 
 
 # Load model
@@ -232,6 +234,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

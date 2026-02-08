@@ -2,45 +2,15 @@ import os
 import gdown
 import streamlit as st
 from tensorflow.keras.models import load_model
-
-MODEL_FILE = "alzheimers_model2.h5"
-MODEL_URL = "https://drive.google.com/file/d/1MELvXRWkKVn3B2yN69uPcj3c9ryEp3ap/view?usp=sharing"
-
-if not os.path.exists(MODEL_FILE):
-    st.write("Downloading model...")
-    gdown.download(MODEL_URL, MODEL_FILE, quiet=False)
-
-@st.cache_resource
-def load_my_model():
-    return load_model(MODEL_FILE)
-
-model = load_my_model()
-
-"""
-ALZHEIMER'S CLASSIFICATION - STREAMLIT WEB APP
-==============================================
-
-A user-friendly web interface for Alzheimer's disease stage prediction
-from brain MRI scans using deep learning and AI-powered explanations.
-
-Author: Adijat Oyetoke
-Date: 21/01/2026
-"""
-
-import streamlit as st
 import numpy as np
 import cv2
 from PIL import Image
 import plotly.graph_objects as go
 import io
-import os
-import pandas as pd
 import requests
-import zipfile
-from tensorflow.keras.models import load_model
 from tensorflow.keras.applications.resnet50 import preprocess_input
 
-# --- Page config ---
+# --- Page config (must be first Streamlit command) ---
 st.set_page_config(
     page_title="Alzheimer's Disease Classifier by ADIJAT OYETOKE",
     page_icon="🧠",
@@ -49,6 +19,9 @@ st.set_page_config(
 )
 
 # --- Constants ---
+MODEL_FILE = "alzheimers_model2.h5"
+# Extract file ID from Google Drive link
+GDRIVE_FILE_ID = "1MELvXRWkKVn3B2yN69uPcj3c9ryEp3ap"
 CATEGORIES = ['ModerateDemented', 'NonDemented', 'VeryMildDemented', 'MildDemented']
 
 CLASS_INFO = {
@@ -58,7 +31,6 @@ CLASS_INFO = {
     'ModerateDemented': {'severity': 'Moderate','description': 'Moderate dementia signs detected','recommendation': 'Immediate medical consultation strongly recommended','color': '#e74c3c'}
 }
 
-# --- YarnGPT API ---
 YARN_API_KEY = os.environ.get("YARN_API_KEY")
 
 # --- Custom CSS ---
@@ -79,10 +51,18 @@ st.markdown("""
 
 @st.cache_resource
 def load_trained_model(model_path):
-    """Load the trained model."""
+    """Load the trained model, downloading if necessary."""
     if not os.path.exists(model_path):
-        st.error(f"Model file not found: {model_path}")
-        return None
+        st.info("Model not found locally. Downloading from Google Drive...")
+        try:
+            # Download using file ID
+            url = f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}"
+            gdown.download(url, model_path, quiet=False)
+            st.success("Model downloaded successfully!")
+        except Exception as e:
+            st.error(f"Failed to download model: {e}")
+            return None
+    
     try:
         model = load_model(model_path)
         return model
@@ -173,7 +153,7 @@ def main():
 
     # Sidebar
     with st.sidebar:
-        st.header("ℹ About")
+        st.header("ℹ️ About")
         st.info("""
 Classify brain MRI scans into:
 - Non-Demented
@@ -185,12 +165,12 @@ Classify brain MRI scans into:
 """)
     
     # Load model
-    MODEL_PATH = "alzheimers_model2.h5" 
-    model = load_trained_model(MODEL_PATH)
-    if not model: st.stop()
+    model = load_trained_model(MODEL_FILE)
+    if not model: 
+        st.stop()
 
     # Upload image
-    st.header(" Upload Brain MRI Scan")
+    st.header("📤 Upload Brain MRI Scan")
     uploaded_file = st.file_uploader("Choose an MRI scan (PNG/JPG/JPEG)", type=["png","jpg","jpeg"])
     
     if uploaded_file:
@@ -202,7 +182,7 @@ Classify brain MRI scans into:
         if preprocessed_img is not None:
             predicted_class, confidence, all_probs = predict_image(model, preprocessed_img)
             if predicted_class:
-                st.success(f"Predicted Stage: {predicted_class} (Confidence: {confidence:.2f}%)")
+                st.success(f"✅ Predicted Stage: {predicted_class} (Confidence: {confidence:.2f}%)")
                 
                 # Charts
                 col1,col2 = st.columns([1,2])
@@ -210,7 +190,7 @@ Classify brain MRI scans into:
                 with col2: st.plotly_chart(create_probability_chart(all_probs,predicted_class), use_container_width=True)
                 
                 # YarnGPT explanation
-                with st.expander("Human-Friendly Explanation (YarnGPT)"):
+                with st.expander("💬 Human-Friendly Explanation (YarnGPT)"):
                     language = st.selectbox("Select Explanation Language:",
                                             ['Nigeria English','Pidgin','Igbo','Hausa','Yoruba'])
                     explanation = explain_with_yarngpt(predicted_class, confidence, language)
@@ -219,27 +199,15 @@ Classify brain MRI scans into:
                 # Download results
                 results_text = f"Predicted Class: {predicted_class}\nConfidence: {confidence:.2f}%\n\nAll Probabilities:\n"
                 for c,p in all_probs.items(): results_text += f"{c}: {p:.2f}%\n"
-                results_text += "\nFor educational/research purposes only."
-                st.download_button("Download Results (TXT)", data=results_text, file_name="alzheimers_results.txt", mime="text/plain")
+                results_text += "\n⚠️ For educational/research purposes only."
+                st.download_button("📥 Download Results (TXT)", data=results_text, file_name="alzheimers_results.txt", mime="text/plain")
 
             else:
                 st.error("Prediction failed. Try another image.")
         else:
             st.error("Failed to preprocess the image. Upload a valid MRI scan.")
     else:
-        st.info(" Upload a brain MRI scan to begin analysis")
+        st.info("👆 Upload a brain MRI scan to begin analysis")
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-

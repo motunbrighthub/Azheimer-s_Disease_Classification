@@ -185,7 +185,7 @@ Classify brain MRI scans into:
 """)
     
     # Load model
-    MODEL_PATH = "alzheimers_model2.keras"  # Adjust path if needed
+    MODEL_PATH = "alzheimers_model2.h5" 
     model = load_trained_model(MODEL_PATH)
     if not model: st.stop()
 
@@ -231,6 +231,7 @@ Classify brain MRI scans into:
 
 if __name__ == "__main__":
     main()
+
 
 
 

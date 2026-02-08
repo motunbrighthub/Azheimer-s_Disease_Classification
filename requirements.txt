@@ -1,9 +1,10 @@
-streamlit
 numpy
 pandas
+tensorflow>=2.13.0
+h5py>=3.8.0
+gdown
+streamlit
+pillow
 opencv-python-headless
-Pillow
-tensorflow
 plotly
 requests
-gdown
